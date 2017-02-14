@@ -23,7 +23,7 @@ Board::Board(Board &b){
     castle_rights = b.castle_rights;
 }
 
-Board::Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location){
+Board::Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location, U8 new_castle_rights, U8 new_enpassant){
 	for(int i=0; i<128; i++)
 		pieces[i] = new_pieces[i];
 	for(int i=0; i<128; i++)
@@ -31,6 +31,8 @@ Board::Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_locat
 	side = new_side;
 	my_king_location = new_my_king_location;
 	opp_king_location = new_opp_king_location;
+	castle_rights = new_castle_rights;
+	enpassant = new_enpassant;
 }
 
 void Board::ClearBoard(){
@@ -64,9 +66,7 @@ void Board::StartingPosition(){
 	opp_king_location = 116;
 
 	castle_rights = 15;//2^4-1
-
-	enpassant = 0;
-
+	enpassant = -1;
 	Display();
 }
 
@@ -202,6 +202,7 @@ void Board::TestCastles(){
 }
 
 void Board::MakeMove(U8 src, U8 dst){
+	//cout<<"MakeMove: "<<(int)src<<" "<<(int)dst<<"\n";
 	if(pieces[src] == KING){
 		my_king_location = dst;
 
@@ -227,23 +228,25 @@ void Board::MakeMove(U8 src, U8 dst){
 		castle_rights &= (U8)(~CASTLE_BK);
 	if(src == A8 && pieces[A8] == ROOK && colors[A8] == BLACK)
 		castle_rights &= (U8)(~CASTLE_BQ);
-
+	//cout<<(pieces[src] == PAWN)<<" "<<(int)dst<<" "<<(int)enpassant<<"\n";
 	if(pieces[src] == PAWN){
 		//Make en passant
-		pieces[dst+(side==WHITE ? SOUTH : NORTH)] = EMPTY;
+		if(dst == enpassant){
+			pieces[dst+(side==WHITE ? SOUTH : NORTH)] = EMPTY;
+			//cout<<"jolo\n";
+		}
 
 		//En passant rights
-		enpassant = (U8)-1;
-		if(pieces[src] == PAWN && (S8)dst-(S8)src == NN)
+		enpassant = -1;
+		//cout<<(int)dst<<" "<<(int)src<<"\n";
+		if((S8)dst-(S8)src == NN)
 			enpassant = src+NORTH;
-		if(pieces[src] == PAWN && (S8)dst-(S8)src == SS)
-			enpassant = (U8)(src+SOUTH);
-        if(enpassant != (U8)-1){
-            cout << "enpassant move after this would be possible\n";
-            cout << (int)src << " " << (int)dst;
-        }
+		if((S8)dst-(S8)src == SS)
+			enpassant = src+SOUTH;
+		//cout<<(int)enpassant<<"\n";
 	}
-
+	else
+		enpassant = -1;
 	SwapSquares(src, dst);
 
 	side = (side^1);
@@ -282,12 +285,47 @@ bool Board::IsAttacked(U8 sq, U8 att_side){
 	return Attackers(sq, att_side, KING) || Attackers(sq, att_side, ROOK) || Attackers(sq, att_side, BISHOP) || Attackers(sq, att_side, KNIGHT) || PawnAttackers(sq, att_side);
 }
 
+void Board::TestBoard3(){
+	ClearBoard();
+	castle_rights = 0;
+	side = WHITE;
+	my_king_location = A5;
+	opp_king_location = H4;
+	enpassant = -1;
+
+	pieces[A5] = KING;
+	pieces[B5] = PAWN;
+	pieces[B4] = ROOK;
+	pieces[E2] = PAWN;
+	pieces[G2] = PAWN;
+
+	colors[A5] = WHITE;
+	colors[B5] = WHITE;
+	colors[B4] = WHITE;
+	colors[E2] = WHITE;
+	colors[G2] = WHITE;
+
+	pieces[C7] = PAWN;
+	pieces[D6] = PAWN;
+	pieces[F4] = PAWN;
+	pieces[H5] = ROOK;
+	pieces[H4] = KING;
+
+	colors[C7] = BLACK;
+	colors[D6] = BLACK;
+	colors[F4] = BLACK;
+	colors[H5] = BLACK;
+	colors[H4] = BLACK;
+
+	//Display();
+}
+
 void Board::setpos(SquareCoor a, PieceType x, PieceColor y){
     pieces[a] = x;
     colors[a] = y;
 }
 
-void Board::test(){
+void Board::TestBoard4(){
 	ClearBoard();
 	castle_rights = 12;
 	side = WHITE;
