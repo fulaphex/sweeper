@@ -21,14 +21,14 @@ Board::Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_locat
 	my_king_location = new_my_king_location;
 	opp_king_location = new_opp_king_location;
 }
-	
+
 void Board::ClearBoard(){
 	for(int i=0; i<128; i++)
 		pieces[i] = EMPTY;
 	for(int i=0; i<128; i++)
 		colors[i] = TRANSPARENT;
 }
-	
+
 void Board::StartingPosition(){
 	pieces[0] = pieces[7] = ROOK;
 	pieces[1] = pieces[6] = KNIGHT;
@@ -39,24 +39,24 @@ void Board::StartingPosition(){
 		pieces[16+i] = PAWN;
 	for(int i=0; i<8; i++)
 		colors[i] = colors[i+16] = WHITE;
-	
+
 	for(int i=0; i<8; i++)
 		pieces[112+i] = pieces[i];
 	for(int i=0; i<8; i++)
 		pieces[96+i] = PAWN;
 	for(int i=0; i<8; i++)
 		colors[96+i] = colors[112+i] = BLACK;
-	
+
 	side = 0;
 	my_king_location = 4;
 	opp_king_location = 116;
-	
+
 	Display();
 }
 
 void Board::Display(){
 	char figures[] = {'K', 'Q', 'R', 'B', 'N', 'P', '.'};
-	
+
 	for(int i=7; i>=0; i--){
 		for(int j=0; j<8; j++)
 			cout<<(char)(figures[ pieces[16*i+j] ] + (colors[16*i+j] == BLACK)*('a'-'A'));
@@ -159,7 +159,7 @@ bool Board::Attackers(U8 sq, U8 att_side, PieceType piece){
 			if(!slide[ piece ]) break;
 		}
 	}
-	
+
 	return false;
 }
 

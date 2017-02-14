@@ -30,7 +30,7 @@ public:
 	U8 opp_king_location;
 	//bool lastWasCastle;
 	//bool lastWasEnpassant;
-	
+
 	Board();
 	Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location);
 	void ClearBoard();
@@ -40,7 +40,7 @@ public:
 	void MakeMove(U8 src, U8 dst);
 	bool IsAttacked(U8 sq, U8 side);
 	void Display();
-	
+
 private:
 	bool Attackers(U8 sq, U8 att_side, PieceType piece);
 	bool PawnAttackers(U8 sq, U8 att_side);

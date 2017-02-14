@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <iostream>
+#include <string>
 using namespace std;
 
 char board[8][8];
@@ -64,7 +65,7 @@ void init_board(){
 int main(){
     ios::sync_with_stdio(false);
     cout.setf(ios::unitbuf);
-    int p = 10;
+    int time_left, opponent_time_left;
     init_board();
     string comm, move;
     cout << "feature reuse=0\n";
@@ -91,6 +92,14 @@ int main(){
             return 0;
         else if(comm == "draw"){
             cout << "offer draw";
+        }
+        else if(comm.substr(0,4) == "time"){
+            time_left = stoi(comm.substr(5));
+            cout << "#       my time remaining: " << time_left << "seconds\n";
+        }
+        else if(comm.substr(0,4) == "otim"){
+            opponent_time_left = stoi(comm.substr(5));
+            cout << "# opponent time remaining: " << time_left << "seconds\n";
         }
         else if(comm.length() == 4){
             int x = int(comm[1]-'1'), y = int(comm[0]-'a'), nx = int(comm[3]-'1'), ny = int(comm[2]-'a');
@@ -122,6 +131,8 @@ int main(){
             print_board();
             move_parsed = false;
         }
+
+
         // print_board();
 
         // p = int(comm);

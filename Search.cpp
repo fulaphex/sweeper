@@ -11,7 +11,7 @@ void Search(Board &state, S8 depth){
 		curr++;
 		return;
 	}
-	
+
 	vector< pair<U8, U8> > moves;
 	state.GeneratePseudoLegal(moves);
 	for(const auto &move : moves){
