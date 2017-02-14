@@ -12,6 +12,17 @@ S8 move_vector[5][8] = {
 
 Board::Board(){}
 
+Board::Board(Board &b){
+    copy(b.pieces, b.pieces+128, pieces);
+    copy(b.colors, b.colors+128, colors);
+    side = b.side;
+    cout << "copy contructor in use\n";
+    my_king_location = b.my_king_location;
+    opp_king_location = b.opp_king_location;
+    enpassant = b.enpassant;
+    castle_rights = b.castle_rights;
+}
+
 Board::Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location){
 	for(int i=0; i<128; i++)
 		pieces[i] = new_pieces[i];
@@ -132,7 +143,7 @@ void Board::GeneratePseudoLegal(vector< pair<U8, U8> > &moves){
 	GenerateCastles(moves);
 	for(S8 i=0; i<8; i++)
 		for(S8 j=0; j<8; j++){
-			U8 sq = 16*i+j;
+			U8 sq = (U8)(16*i+j);
 			if(colors[sq] == side){
 				if(pieces[sq] == PAWN)
 					GeneratePawnMoves(sq, moves);
@@ -140,7 +151,7 @@ void Board::GeneratePseudoLegal(vector< pair<U8, U8> > &moves){
 					for(U8 dir=0; dir<vectors_len[ pieces[sq] ]; dir++){
 						U8 pos = sq;
 						while(true){
-							pos = pos + move_vector[ pieces[sq] ][ dir ];
+							pos = pos + (U8)move_vector[ pieces[sq] ][ dir ];
 							if(! IS_SQ(pos)) break;
 							if(pieces[pos] == EMPTY){
 								moves.push_back(make_pair(sq, pos));
@@ -222,11 +233,15 @@ void Board::MakeMove(U8 src, U8 dst){
 		pieces[dst+(side==WHITE ? SOUTH : NORTH)] = EMPTY;
 
 		//En passant rights
-		enpassant = -1;
+		enpassant = (U8)-1;
 		if(pieces[src] == PAWN && (S8)dst-(S8)src == NN)
 			enpassant = src+NORTH;
 		if(pieces[src] == PAWN && (S8)dst-(S8)src == SS)
-			enpassant = src+SOUTH;
+			enpassant = (U8)(src+SOUTH);
+        if(enpassant != (U8)-1){
+            cout << "enpassant move after this would be possible\n";
+            cout << (int)src << " " << (int)dst;
+        }
 	}
 
 	SwapSquares(src, dst);
@@ -239,7 +254,7 @@ bool Board::Attackers(U8 sq, U8 att_side, PieceType piece){
 	for(U8 dir=0; dir<vectors_len[ piece ]; dir++){
 		U8 pos = sq;
 		while(true){
-			pos = pos + move_vector[ piece ][ dir ];
+			pos = pos + (U8)move_vector[ piece ][ dir ];
 			if(! IS_SQ(pos)) break;
 			if(pieces[pos] != EMPTY){
 				if((colors[pos] == att_side) && (pieces[pos] == piece || (pieces[pos] == QUEEN && (piece == ROOK || piece == BISHOP))))
@@ -330,14 +345,5 @@ void Board::test(){
 
     my_king_location = G1;
     opp_king_location = E8;
-    enpassant = -1;
-	// pieces[E8] = KING;
-	// colors[E8] = BLACK;
-	// pieces[A8] = ROOK;
-	// colors[A8] = BLACK;
-	// pieces[H8] = ROOK;
-	// colors[H8] = BLACK;
-	//
-	// pieces[D6] = BISHOP;
-	// colors[D6] = WHITE;
+    enpassant = (U8)-1;
 }

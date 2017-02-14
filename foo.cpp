@@ -24,10 +24,10 @@ string make_move(){
     for(int i = 0; i < 7; i++){
         for(int j = 0; j < 8; j++){
             if(board[i][j] == 'P' && board[i-1][j] == '.'){
-                move[0] = j + 'a';
-                move[1] = i + '1';
-                move[2] = j + 'a';
-                move[3] = i-1 + '1';
+                move[0] = (char)j + 'a';
+                move[1] = (char)i + '1';
+                move[2] = (char)j + 'a';
+                move[3] = (char)(i-1) + '1';
                 board[i-1][j] = board[i][j];
                 board[i][j] = '.';
                 return move;
@@ -91,6 +91,10 @@ int main(){
             return 0;
         else if(comm == "draw"){
             cout << "offer draw";
+        }
+        else if(comm.substr(0,5) == "level"){
+            // Todo parse level command and time
+            continue;
         }
         else if(comm.substr(0,4) == "time"){
             time_left = stoi(comm.substr(5));
