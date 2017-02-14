@@ -49,7 +49,7 @@ public:
 	U8 enpassant;
 	
 	Board();
-	Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location);
+	Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location, U8 new_castle_rights, U8 new_enpassant);
 	void ClearBoard();
 	void StartingPosition();
 	void GeneratePseudoLegal(vector< pair<U8, U8> > &moves);
@@ -57,6 +57,8 @@ public:
 	bool IsAttacked(U8 sq, U8 side);
 	void Display();
 	void TestCastles();
+	void TestBoard3();
+	void TestBoard4();
 	
 private:
 	void GeneratePawnMoves(U8 sq, vector< pair<U8, U8> > &moves);
@@ -64,6 +66,7 @@ private:
 	bool Attackers(U8 sq, U8 att_side, PieceType piece);
 	bool PawnAttackers(U8 sq, U8 att_side);
 	void inline SwapSquares(U8 src, U8 dst);
+	void setpos(SquareCoor a, PieceType x, PieceColor y);
 };
 
 #endif
