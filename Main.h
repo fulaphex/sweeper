@@ -13,4 +13,8 @@ using namespace std;
 #define S16 short int
 #define S8 char
 
+extern int curr;
+extern int captures;
+extern int checks;
+
 #endif
