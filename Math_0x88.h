@@ -1,3 +1,6 @@
+#ifndef MATH_0X88_H
+#define MATH_0X88_H
+
 /* row identifiers */
  
 #define ROW_1   ( A1 >> 4 )
@@ -50,3 +53,5 @@
  
 /* determine if two squares lie in the same row */
 #define SAME_ROW(sq1,sq2) ( ( ROW(sq1) == ROW(sq2) ) ? (1) : (0) )
+
+#endif
