@@ -5,6 +5,8 @@
 int curr = 0;
 int captures = 0;
 int checks = 0;
+int mates = 0;
+int enpassants = 0;
 
 void Search(Board &state, S8 depth){
 	if(depth == 0){
@@ -13,22 +15,26 @@ void Search(Board &state, S8 depth){
 		return;
 	}
 
-	vector< pair<U8, U8> > moves;
+	vector< MoveType > moves;
 	state.GeneratePseudoLegal(moves);
 	int cnt = 0;
 	for(const auto &move : moves){
 		Board new_state(state.pieces, state.colors, state.side, state.my_king_location, state.opp_king_location, state.castle_rights, state.enpassant);
-		new_state.MakeMove(move.first, move.second);
-		new_state.Display();
-		cout << cnt << "\n";
-		cout << (int)move.first << " " << (int)move.second <<  "\n";
-		cnt ++;
+		new_state.MakeMove(move.src, move.dst);
+		//new_state.Display();
+		//cout << cnt << "\n";
+		//cout << (int)move.src << " " << (int)move.dst <<  "\n";
+		//cnt ++;
 		if(IsLegal(new_state)){
-			if(depth == 1 && (state.pieces[move.second] != EMPTY || (state.pieces[move.first] == PAWN && move.second == state.enpassant))){
+			cnt++;
+			if(depth == 1 && (state.pieces[move.dst] != EMPTY || (state.pieces[move.src] == PAWN && move.dst == state.enpassant))){
 				captures++;
 				//cout<<captures<<"\n";
-				//cout<<(int)move.first<<" "<<(int)move.second<<" "<<(int)state.enpassant<<"\n";
+				//cout<<(int)move.src<<" "<<(int)move.dst<<" "<<(int)state.enpassant<<"\n";
 				//new_state.Display();
+			}
+			if(depth == 1 && state.pieces[move.src] == PAWN && move.dst == state.enpassant){
+				enpassants++;
 			}
 			if(depth == 1 && new_state.IsAttacked(new_state.my_king_location, (new_state.side^1))){
 				checks++;
@@ -37,6 +43,9 @@ void Search(Board &state, S8 depth){
 			Search(new_state, depth-1);
 		}
 	}
+	
+	if(depth == 1 && cnt == 0)
+		mates++;
 }
 
 bool IsLegal(Board &state){

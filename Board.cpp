@@ -81,65 +81,65 @@ void Board::Display(){
 	cout<<"\n\n";
 }
 
-void Board::GeneratePawnMoves(U8 sq, vector< pair<U8, U8> > &moves){
+void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
 	if(side == WHITE){
 		//regular moves
 		if(pieces[sq + NORTH] == EMPTY){
-			moves.push_back(make_pair(sq, sq+NORTH));
+			moves.push_back(MoveType(sq, sq+NORTH));
 			if((ROW(sq) == 1) && pieces[sq + NN] == EMPTY)
-				moves.push_back(make_pair(sq, sq+NN));
+				moves.push_back(MoveType(sq, sq+NN));
 		}
 		//To do - promotions
 		//captures
 		if(IS_SQ(sq+NW) && (colors[sq+NW] == (side^1) || enpassant == sq+NW)){
-			moves.push_back(make_pair(sq, sq+NW));
+			moves.push_back(MoveType(sq, sq+NW));
 		}
 		if(IS_SQ(sq+NE) && (colors[sq+NE] == (side^1) || enpassant == sq+NE)){
-			moves.push_back(make_pair(sq, sq+NE));
+			moves.push_back(MoveType(sq, sq+NE));
 		}
 	}
 	else{//side == BLACK
 		//regular moves
 		if(pieces[sq + SOUTH] == EMPTY){
-			moves.push_back(make_pair(sq, sq+SOUTH));
+			moves.push_back(MoveType(sq, sq+SOUTH));
 			if((ROW(sq) == 6) && pieces[sq + SS] == EMPTY)
-				moves.push_back(make_pair(sq, sq+SS));
+				moves.push_back(MoveType(sq, sq+SS));
 		}
 		//To do - promotions
 		//captures
 		if(IS_SQ(sq+SW) && (colors[sq+SW] == (side^1) || enpassant == sq+SW)){
-			moves.push_back(make_pair(sq, sq+SW));
+			moves.push_back(MoveType(sq, sq+SW));
 		}
 		if(IS_SQ(sq+SE) && (colors[sq+SE] == (side^1) || enpassant == sq+SE)){
-			moves.push_back(make_pair(sq, sq+SE));
+			moves.push_back(MoveType(sq, sq+SE));
 		}
 	}
 }
 
-void Board::GenerateCastles(vector< pair<U8, U8> > &moves){
+void Board::GenerateCastles(vector< MoveType > &moves){
 	if(side == WHITE){
 		if(castle_rights & CASTLE_WK){
 			if(pieces[F1] == EMPTY && pieces[G1] == EMPTY && !IsAttacked(E1, (side^1)) && !IsAttacked(F1, (side^1))) //&& !IsAttacked(G1, (side^1)) - I will check that anyway
-				moves.push_back(make_pair(E1, G1));
+				moves.push_back(MoveType(E1, G1));
 		}
 		if(castle_rights & CASTLE_WQ){
 			if(pieces[B1] == EMPTY && pieces[C1] == EMPTY && pieces[D1] == EMPTY && !IsAttacked(E1, (side^1)) && !IsAttacked(D1, (side^1)))//&& !IsAttacked(C1, (side^1)) - I will check that anyway
-				moves.push_back(make_pair(E1, C1));
+				moves.push_back(MoveType(E1, C1));
 		}
 	}
 	else{
 		if(castle_rights & CASTLE_BK){
 			if(pieces[F8] == EMPTY && pieces[G8] == EMPTY && !IsAttacked(E8, (side^1)) && !IsAttacked(F8, (side^1))) //&& !IsAttacked(G8, (side^1)) - I will check that anyway
-				moves.push_back(make_pair(E8, G8));
+				moves.push_back(MoveType(E8, G8));
 		}
 		if(castle_rights & CASTLE_BQ){
 			if(pieces[B8] == EMPTY && pieces[C8] == EMPTY && pieces[D8] == EMPTY && !IsAttacked(E8, (side^1)) && !IsAttacked(D8, (side^1)))//&& !IsAttacked(C8, (side^1)) - I will check that anyway
-				moves.push_back(make_pair(E8, C8));
+				moves.push_back(MoveType(E8, C8));
 		}
 	}
 }
 
-void Board::GeneratePseudoLegal(vector< pair<U8, U8> > &moves){
+void Board::GeneratePseudoLegal(vector< MoveType > &moves){
 	GenerateCastles(moves);
 	for(S8 i=0; i<8; i++)
 		for(S8 j=0; j<8; j++){
@@ -154,10 +154,10 @@ void Board::GeneratePseudoLegal(vector< pair<U8, U8> > &moves){
 							pos = pos + (U8)move_vector[ pieces[sq] ][ dir ];
 							if(! IS_SQ(pos)) break;
 							if(pieces[pos] == EMPTY){
-								moves.push_back(make_pair(sq, pos));
+								moves.push_back(MoveType(sq, pos));
 							}
 							else if(colors[pos] != side){
-								moves.push_back(make_pair(sq, pos));
+								moves.push_back(MoveType(sq, pos));
 								break;
 							}
 							else{
@@ -192,12 +192,12 @@ void Board::TestCastles(){
 	pieces[D6] = BISHOP;
 	colors[D6] = WHITE;
 
-	vector< pair<U8, U8> > M;
+	vector< MoveType > M;
 	Display();
 	GenerateCastles(M);
 	cout<<M.size()<<"\n";
 	if(M.size() > 0)
-		MakeMove(M[0].first, M[0].second);
+		MakeMove(M[0].src, M[0].dst);
 	Display();
 }
 

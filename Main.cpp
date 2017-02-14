@@ -7,12 +7,12 @@ Board board;
 int main(){
 	//board.TestCastles();
 	board.ClearBoard();
-	//board.StartingPosition();
-	board.TestBoard4();
+	board.StartingPosition();
+	//board.TestBoard3();
 	//board.MakeMove(E2, E4);
 	board.Display();
 	//cout<<(int)board.enpassant<<"\n";
-	Search(board, 1);
-	cout<<curr<<" "<<captures<<" "<<checks<<"\n";
+	Search(board, 6);
+	cout<<curr<<" "<<captures<<" "<<checks<<" "<<mates<<" "<<enpassants<<"\n";
 	return 0;
 }
