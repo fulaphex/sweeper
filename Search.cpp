@@ -9,19 +9,25 @@ int checks = 0;
 void Search(Board &state, S8 depth){
 	if(depth == 0){
 		curr++;
+		// state.Display();
 		return;
 	}
-	
+
 	vector< pair<U8, U8> > moves;
 	state.GeneratePseudoLegal(moves);
+	int cnt = 0;
 	for(const auto &move : moves){
 		Board new_state(state.pieces, state.colors, state.side, state.my_king_location, state.opp_king_location);
 		new_state.MakeMove(move.first, move.second);
+		new_state.Display();
+		cout << cnt << "\n";
+		cout << (int)move.first << " " << (int)move.second <<  "\n";
+		cnt ++;
 		if(IsLegal(new_state)){
 			captures += (depth == 1 && state.pieces[move.second] != EMPTY);
 			if(depth == 1 && new_state.IsAttacked(new_state.my_king_location, (new_state.side^1))){
 				checks++;
-				//new_state.Display();
+				// new_state.Display();
 			}
 			Search(new_state, depth-1);
 		}

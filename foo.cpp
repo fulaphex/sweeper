@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <unistd.h>
 using namespace std;
 
 char board[8][8];
@@ -16,6 +18,7 @@ void print_board(){
 }
 
 string make_move(){
+    usleep(rand()%300000 + 700000);
     string move = "....";
     cout << "# CALCULATING A MOVE HERE\n";
     for(int i = 0; i < 7; i++){
@@ -78,15 +81,11 @@ int main(){
     getline(cin, comm);
     cout << "feature debug=1\n";
     getline(cin, comm);
-    // cout << "feature variants=normal,crazyhouse";
     cout << "feature done=1\n";
     getline(cin, comm);
-    // cout << "xboard"
-    // cout << "variant crazyhouse"
     bool move_parsed = false;
     while(true){
-        // p = 10;
-        cout << "# insinde game loop\n";
+        // cout << "# insinde game loop\n";
         getline(cin, comm);
         if(comm == "quit")
             return 0;
@@ -95,31 +94,31 @@ int main(){
         }
         else if(comm.substr(0,4) == "time"){
             time_left = stoi(comm.substr(5));
-            cout << "#       my time remaining: " << time_left << "seconds\n";
+            cout << "#       my time remaining: " << time_left/100 << "seconds\n";
         }
         else if(comm.substr(0,4) == "otim"){
             opponent_time_left = stoi(comm.substr(5));
-            cout << "# opponent time remaining: " << time_left << "seconds\n";
+            cout << "# opponent time remaining: " << opponent_time_left/100 << "seconds\n";
         }
         else if(comm.length() == 4){
             int x = int(comm[1]-'1'), y = int(comm[0]-'a'), nx = int(comm[3]-'1'), ny = int(comm[2]-'a');
             // cout  << "# " << x << y << nx << ny << "\n";
             if(0 <= min(min(x, nx), min(y, ny)) && 8 > max(max(x, nx), max(y, ny))){
-                cout << "# parsing a move: " << comm << "\n";
-                print_board();
+                // cout << "# parsing a move: " << comm << "\n";
+                // print_board();
                 board[nx][ny] = board[x][y];
                 board[x][y] = '.';
-                print_board();
+                // print_board();
                 move_parsed = true;
             }
         }
         else{
-            cout << "# nothing to do: \'" << comm << "\' " << comm.length() << " " << move_parsed << "\n";
+            // cout << "# nothing to do: \'" << comm << "\' " << comm.length() << " " << move_parsed << "\n";
             continue;
         }
         if(move_parsed){
-            cout << "# making a move\n";
-            print_board();
+            // cout << "# making a move\n";
+            // print_board();
             move = make_move();
             if(move[0] != '.'){
                 cout << "move " << move << "\n";
@@ -128,7 +127,7 @@ int main(){
                 cout << "resign\n";
                 return 0;
             }
-            print_board();
+            // print_board();
             move_parsed = false;
         }
 

@@ -5,11 +5,12 @@
 Board board;
 
 int main(){
-	board.TestCastles();
-// 	board.ClearBoard();
+	board.ClearBoard();
+	board.test();
 // 	board.StartingPosition();
-// 	Search(board, 5);
-// 	cout<<curr<<" "<<captures<<" "<<checks<<"\n";
-	
+	board.Display();
+	Search(board, 1);
+	cout<<curr<<" "<<captures<<" "<<checks<<"\n";
+
 	return 0;
 }

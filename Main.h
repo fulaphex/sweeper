@@ -1,7 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include<bits/stdc++.h>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+// #include<bits/stdc++.h>
 using namespace std;
 
 #define U64 unsigned long long int
