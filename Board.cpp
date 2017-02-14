@@ -101,12 +101,49 @@ void Board::GeneratePawnMoves(U8 sq, vector< pair<U8, U8> > &moves){
 	}
 }
 
+void Board::GenerateCastles(vector< pair<U8, U8> > &moves){
+	if(side == WHITE){
+		if(castle_rights & CASTLE_WK){
+			if(pieces[F1] == EMPTY && pieces[G1] == EMPTY && !isAttacked(E1, (side^1)) && !isAttacked(F1, (side^1)) && !isAttacked(G1, (side^1)))
+				moves.push_back(make_pair(E1, G1));
+		}
+		if ( b.castle & CASTLE_WQ ) {
+			if ( ( b.pieces[B1] == PIECE_EMPTY ) &&
+					( b.pieces[C1] == PIECE_EMPTY ) &&
+					( b.pieces[D1] == PIECE_EMPTY ) &&
+					( !isAttacked(!b.stm,E1) ) &&
+					( !isAttacked(!b.stm,D1) ) &&
+					( !isAttacked(!b.stm,C1) ) )
+				movegen_push(E1,C1,KING,PIECE_EMPTY,MFLAG_CASTLE);
+		}
+	} 
+	else {
+		if ( b.castle & CASTLE_BK ) {
+			if ( ( b.pieces[F8] == PIECE_EMPTY ) &&
+					( b.pieces[G8] == PIECE_EMPTY ) &&
+					( !isAttacked(!b.stm,E8) ) &&
+					( !isAttacked(!b.stm,F8) ) &&
+					( !isAttacked(!b.stm,G8) ) )
+				movegen_push(E8,G8,KING,PIECE_EMPTY,MFLAG_CASTLE);
+		}
+		if ( b.castle & CASTLE_BQ ) {
+			if ( ( b.pieces[B8] == PIECE_EMPTY ) &&
+					( b.pieces[C8] == PIECE_EMPTY ) &&
+					( b.pieces[D8] == PIECE_EMPTY ) &&
+					( !isAttacked(!b.stm,E8) ) &&
+					( !isAttacked(!b.stm,D8) ) &&
+					( !isAttacked(!b.stm,C8) ) )
+				movegen_push(E8,C8,KING,PIECE_EMPTY,MFLAG_CASTLE);
+		}
+	}
+}
+
 void Board::GeneratePseudoLegal(vector< pair<U8, U8> > &moves){
+	GenerateCastles(moves);
 	for(S8 i=0; i<8; i++)
 		for(S8 j=0; j<8; j++){
 			U8 sq = 16*i+j;
 			if(colors[sq] == side){
-				//To do - castle
 				if(pieces[sq] == PAWN)
 					GeneratePawnMoves(sq, moves);
 				else{
