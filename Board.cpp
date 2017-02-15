@@ -74,11 +74,15 @@ void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
 	if(side == WHITE){
 		//regular moves
 		if(pieces[sq + NORTH] == EMPTY){
-			moves.push_back(MoveType(sq, sq+NORTH));
+			if(ROW(sq) == 6){
+				for(int p = QUEEN; p!=EMPTY; p++)
+					moves.push_back(MoveType(sq, sq+NORTH, (PieceType)p));
+			}
+			else
+				moves.push_back(MoveType(sq, sq+NORTH));
 			if((ROW(sq) == 1) && pieces[sq + NN] == EMPTY)
 				moves.push_back(MoveType(sq, sq+NN));
 		}
-		//To do - promotions
 		//captures
 		if(IS_SQ(sq+NW) && (colors[sq+NW] == (side^1) || enpassant == sq+NW)){
 			moves.push_back(MoveType(sq, sq+NW));
@@ -90,11 +94,15 @@ void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
 	else{//side == BLACK
 		//regular moves
 		if(pieces[sq + SOUTH] == EMPTY){
-			moves.push_back(MoveType(sq, sq+SOUTH));
+			if(ROW(sq) == 1){
+				for(int p = QUEEN; p!=EMPTY; p++)
+					moves.push_back(MoveType(sq, sq+SOUTH, (PieceType)p));
+			}
+			else
+				moves.push_back(MoveType(sq, sq+SOUTH));
 			if((ROW(sq) == 6) && pieces[sq + SS] == EMPTY)
 				moves.push_back(MoveType(sq, sq+SS));
 		}
-		//To do - promotions
 		//captures
 		if(IS_SQ(sq+SW) && (colors[sq+SW] == (side^1) || enpassant == sq+SW)){
 			moves.push_back(MoveType(sq, sq+SW));
@@ -190,8 +198,9 @@ void Board::TestCastles(){
 	Display();
 }
 
-void Board::MakeMove(U8 src, U8 dst){
+void Board::MakeMove(MoveType move){
 	//cout<<"MakeMove: "<<(int)src<<" "<<(int)dst<<"\n";
+	U8 src = move.src, dst = move.dst, promotion = move.promotion;
 	if(pieces[src] == KING){
 		my_king_location = dst;
 

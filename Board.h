@@ -46,6 +46,7 @@ struct MoveType{
 	MoveType(U8 x, U8 y){
 		src = x;
 		dst = y;
+		promotion = EMPTY;
 	}
 
 	MoveType(U8 x, U8 y, PieceType piece){
