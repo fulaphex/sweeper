@@ -27,7 +27,7 @@ void Search(Board &state, S8 depth){
 		//cout << cnt << "\n";
 		//cout << (int)move.src << " " << (int)move.dst <<  "\n";
 		//cnt ++;
-		if(IsLegal(new_state)){
+		if(new_state.IsLegal()){
 			cnt++;
 			if(depth == 1 && state.pieces[move.src] == PAWN && ((ROW(move.dst) == 0) || ( ROW(move.dst) == 7))){
 				promotions++;
@@ -56,9 +56,4 @@ void Search(Board &state, S8 depth){
 
 	if(depth == 1 && cnt == 0)
 		mates++;
-}
-
-bool IsLegal(Board &state){
-	//return true;
-	return !state.IsAttacked(state.opp_king_location, state.side);
 }
