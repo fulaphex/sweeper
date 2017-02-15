@@ -1,6 +1,7 @@
 #include "Main.h"
 #include "Board.h"
 #include "Search.h"
+#include "Eval.h"
 
 int curr = 0;
 int captures = 0;
@@ -10,7 +11,54 @@ int enpassants = 0;
 int promotions = 0;
 int castles = 0;
 
-void Search(Board &state, S8 depth){
+MoveType FindBestMove(Board &state, S8 depth){
+	return BestMove(state, depth);
+}
+
+MoveType BestMove(Board &state, S8 depth){
+	int best = -INF-1;
+	MoveType ret(255, 255);
+	vector< MoveType > moves;
+	state.GeneratePseudoLegal(moves);
+	for(const auto &move : moves){
+		Board new_state = state;
+		new_state.MakeMove(move);
+		if(new_state.IsLegal()){
+			int cand = -Search(new_state, depth-1);
+			if(cand > best){
+				best = cand;
+				ret = move;
+			}
+		}
+	}
+	
+	return ret;
+	
+}
+
+int Search(Board &state, S8 depth){
+	if(depth == 0){
+		return Eval(state);
+	}
+	
+	int ret = -INF;
+	vector< MoveType > moves;
+	state.GeneratePseudoLegal(moves);
+	int cnt = 0;
+	for(const auto &move : moves){
+		Board new_state = state;
+		new_state.MakeMove(move);
+		if(new_state.IsLegal()){
+			cnt++;
+			int cand = Search(new_state, depth-1);
+			ret = max(ret, cand);
+		}
+	}
+	if(cnt == 0)
+		return (state.IsAttacked(state.my_king_location, state.side^1) ? -INF : 0);
+}
+
+void Perft(Board &state, S8 depth){
 	if(depth == 0){
 		curr++;
 		// state.Display();
@@ -50,7 +98,7 @@ void Search(Board &state, S8 depth){
 			if(depth == 1 && state.pieces[move.src] == KING && (move.dst - move.src == 2 || move.src - move.dst == 2)){
 				castles++;
 			}
-			Search(new_state, depth-1);
+			Perft(new_state, depth-1);
 		}
 	}
 

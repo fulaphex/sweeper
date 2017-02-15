@@ -19,7 +19,10 @@ int main(){
 	board.MakeMove(MoveType(E8, F7));
 	board.Display();
 	//cout<<(int)board.enpassant<<"\n";
-	Search(board, 1);
+	Perft(board, 1);
 	cout<<curr<<" "<<captures<<" "<<checks<<" "<<mates<<" "<<enpassants<<" "<<promotions<<" "<<castles<<"\n";
+	
+	MoveType best = FindBestMove(board, 1);
+	cout<<best.src<<" "<<best.dst<<" "<<best.drop<<" "<<best.promotion<<"\n";
 	return 0;
 }
