@@ -3,7 +3,7 @@
 
 extern int curr;
 void Perft(Board &state, S8 depth);
-int Search(Board &state, S8 depth);
+int Search(Board &state, S8 depth, int alpha, int beta);
 MoveType BestMove(Board &state, S8 depth);
 MoveType FindBestMove(Board &state, S8 depth);
 

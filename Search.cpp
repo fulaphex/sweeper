@@ -24,7 +24,7 @@ MoveType BestMove(Board &state, S8 depth){
 		Board new_state = state;
 		new_state.MakeMove(move);
 		if(new_state.IsLegal()){
-			int cand = -Search(new_state, depth-1);
+			int cand = -Search(new_state, depth-1, -INF, INF);
 			if(cand > best){
 				best = cand;
 				ret = move;
@@ -36,7 +36,7 @@ MoveType BestMove(Board &state, S8 depth){
 	
 }
 
-int Search(Board &state, S8 depth){
+int Search(Board &state, S8 depth, int alpha, int beta){
 	if(depth == 0){
 		return Eval(state);
 	}
@@ -50,12 +50,16 @@ int Search(Board &state, S8 depth){
 		new_state.MakeMove(move);
 		if(new_state.IsLegal()){
 			cnt++;
-			int cand = Search(new_state, depth-1);
+			int cand = -Search(new_state, depth-1, -beta, -alpha);
 			ret = max(ret, cand);
+			alpha = max(alpha, ret);
+			if(alpha >= beta) return alpha;
 		}
 	}
 	if(cnt == 0)
 		return (state.IsAttacked(state.my_king_location, state.side^1) ? -INF : 0);
+	
+	return ret;
 }
 
 void Perft(Board &state, S8 depth){
