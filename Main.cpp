@@ -9,14 +9,6 @@ int main(){
 	board.ClearBoard();
 	board.StartingPosition();
 	//board.TestBoard3();
-	// board.MakeMove(E2, E4);
-	// board.MakeMove(E7, E5);
-	// board.MakeMove(G1, F3);
-	// board.MakeMove(B8, C6);
-	// board.MakeMove(F1, C4);
-	// board.MakeMove(F8, C5);
-	// board.MakeMove(C4, F7);
-	// board.MakeMove(E8, F7);
 	board.MakeMove(MoveType(E2, E4));
 	board.MakeMove(MoveType(E7, E5));
 	board.MakeMove(MoveType(G1, F3));

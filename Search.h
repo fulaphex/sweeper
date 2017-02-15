@@ -3,6 +3,5 @@
 
 extern int curr;
 void Search(Board &state, S8 depth);
-bool IsLegal(Board &state);
 
 #endif

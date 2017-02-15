@@ -18,6 +18,7 @@ Board::Board(Board &b){
     copy(b.primal, b.primal+128, primal);
     copy(b.white_stash, b.white_stash+6 , white_stash);
     copy(b.black_stash, b.black_stash+6 , black_stash);
+	copy(&b.piece_count[0][0], &b.piece_count[0][0]+12, &piece_count[0][0]);
     side = b.side;
     my_king_location = b.my_king_location;
     opp_king_location = b.opp_king_location;
@@ -57,6 +58,16 @@ void Board::StartingPosition(){
 
     for(int i = 0; i < 6; i++)
         white_stash[i] = black_stash[i] = 0;
+
+	piece_count[WHITE][KING] = 1;
+	piece_count[WHITE][QUEEN] = 1;
+	piece_count[WHITE][ROOK] = 2;
+	piece_count[WHITE][BISHOP] = 2;
+	piece_count[WHITE][KNIGHT] = 2;
+	piece_count[WHITE][PAWN] = 8;
+
+	for(int i=KING; i!=EMPTY; i++)
+		piece_count[BLACK][i] = piece_count[WHITE][i];
 
 	side = 0;
 
@@ -489,4 +500,8 @@ void Board::TestCastles(){
 	Display();
 	GenerateCastles(M);
 	cout<<M.size()<<"\n";
+
+bool Board::IsLegal(){
+	//return true;
+	return !IsAttacked(opp_king_location, side);
 }

@@ -4,9 +4,11 @@ TARGETS = Main
 
 all: $(TARGETS)
 
-Main: Board.o Search.o
+Main: Board.o Search.o Eval.o
 
 Search: Board.o
+
+Eval: Board.o
 
 clean:
 	rm -f *.o
