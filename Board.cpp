@@ -81,20 +81,23 @@ void Board::StartingPosition(){
 void Board::Display(){
 	char figures[] = {'K', 'Q', 'R', 'B', 'N', 'P', '.'};
 	
-	cout<<"\n";
+	cout<<"# "<<((castle_rights&8)>0)<<" "<<((castle_rights&4)>0)<<" "<<((castle_rights&2)>0)<<" "<<((castle_rights&1)>0)<<"\n";
+	
+	cout<<"\n# ";
 	for(int p = QUEEN; p!=EMPTY; p++)
 		cout<<stash[BLACK][p]<<" ";
-	cout<<"\n\n";
+	cout<<"#\n#\n";
 	
 	for(int i=7; i>=0; i--){
+		cout<<"# ";
 		for(int j=0; j<8; j++)
 			cout<<(char)(figures[ pieces[16*i+j] ] + (colors[16*i+j] == BLACK)*('a'-'A'));
 		cout<<"\n";
 	}
-	cout<<"\n\n";
+	cout<<"#\n#\n";
 	for(int p = QUEEN; p!=EMPTY; p++)
 		cout<<stash[WHITE][p]<<" ";
-	cout<<"\n\n";
+	cout<<"#\n#\n";
 }
 
 void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
@@ -265,9 +268,9 @@ void Board::MakeMove(MoveType move){
     		my_king_location = dst;
 
     		if(colors[src] == WHITE)
-    			castle_rights &= (U8)(~(CASTLE_WK&CASTLE_WQ));
+    			castle_rights &= (U8)(~(CASTLE_WK|CASTLE_WQ));
     		else
-    			castle_rights &= (U8)(~(CASTLE_BK&CASTLE_BQ));
+    			castle_rights &= (U8)(~(CASTLE_BK|CASTLE_BQ));
 
     		if(dst - src == 2){//short castle
     			SwapSquares(dst+1, dst-1);
