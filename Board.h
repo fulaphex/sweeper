@@ -68,7 +68,6 @@ public:
 
 	Board();
 	Board(Board &b);
-	Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location, U8 new_castle_rights, U8 new_enpassant);
 	void ClearBoard();
 	void StartingPosition();
 	void GeneratePseudoLegal(vector< MoveType > &moves);

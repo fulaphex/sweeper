@@ -19,7 +19,7 @@ void Search(Board &state, S8 depth){
 	state.GeneratePseudoLegal(moves);
 	int cnt = 0;
 	for(const auto &move : moves){
-		Board new_state(state.pieces, state.colors, state.side, state.my_king_location, state.opp_king_location, state.castle_rights, state.enpassant);
+		Board new_state = state;
 		new_state.MakeMove(move.src, move.dst);
 		//new_state.Display();
 		//cout << cnt << "\n";
@@ -43,7 +43,7 @@ void Search(Board &state, S8 depth){
 			Search(new_state, depth-1);
 		}
 	}
-	
+
 	if(depth == 1 && cnt == 0)
 		mates++;
 }

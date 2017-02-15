@@ -17,23 +17,11 @@ Board::Board(Board &b){
     copy(b.colors, b.colors+128, colors);
     copy(b.primal, b.primal+128, primal);
     side = b.side;
-    cout << "copy contructor in use\n";
     my_king_location = b.my_king_location;
     opp_king_location = b.opp_king_location;
     enpassant = b.enpassant;
     castle_rights = b.castle_rights;
-}
 
-Board::Board(U8 new_pieces[], U8 new_colors[], U8 new_side, U8 new_my_king_location, U8 new_opp_king_location, U8 new_castle_rights, U8 new_enpassant){
-	for(int i=0; i<128; i++)
-		pieces[i] = new_pieces[i];
-	for(int i=0; i<128; i++)
-		colors[i] = new_colors[i];
-	side = new_side;
-	my_king_location = new_my_king_location;
-	opp_king_location = new_opp_king_location;
-	castle_rights = new_castle_rights;
-	enpassant = new_enpassant;
 }
 
 void Board::ClearBoard(){
