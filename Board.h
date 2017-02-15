@@ -72,7 +72,7 @@ public:
 	void ClearBoard();
 	void StartingPosition();
 	void GeneratePseudoLegal(vector< MoveType > &moves);
-	void MakeMove(U8 src, U8 dst);
+	void MakeMove(MoveType move);
 	bool IsAttacked(U8 sq, U8 side);
 	void Display();
 	void test();

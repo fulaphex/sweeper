@@ -12,7 +12,7 @@ int main(){
 	//board.MakeMove(E2, E4);
 	board.Display();
 	//cout<<(int)board.enpassant<<"\n";
-	Search(board, 5);
+	Search(board, 6);
 	cout<<curr<<" "<<captures<<" "<<checks<<" "<<mates<<" "<<enpassants<<"\n";
 	return 0;
 }

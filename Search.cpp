@@ -20,7 +20,7 @@ void Search(Board &state, S8 depth){
 	int cnt = 0;
 	for(const auto &move : moves){
 		Board new_state = state;
-		new_state.MakeMove(move.src, move.dst);
+		new_state.MakeMove(move);
 		//new_state.Display();
 		//cout << cnt << "\n";
 		//cout << (int)move.src << " " << (int)move.dst <<  "\n";

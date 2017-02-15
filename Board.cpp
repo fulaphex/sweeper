@@ -193,9 +193,6 @@ void Board::TestCastles(){
 	Display();
 	GenerateCastles(M);
 	cout<<M.size()<<"\n";
-	if(M.size() > 0)
-		MakeMove(M[0].src, M[0].dst);
-	Display();
 }
 
 void Board::MakeMove(MoveType move){
@@ -242,6 +239,10 @@ void Board::MakeMove(MoveType move){
 		if((S8)dst-(S8)src == SS)
 			enpassant = src+SOUTH;
 		//cout<<(int)enpassant<<"\n";
+		
+		//Promotion
+		if((ROW(dst) == 0) || ROW(dst) == 7)
+			pieces[src] = promotion;
 	}
 	else
 		enpassant = -1;
