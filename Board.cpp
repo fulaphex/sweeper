@@ -16,8 +16,7 @@ Board::Board(Board &b){
     copy(b.pieces, b.pieces+128, pieces);
     copy(b.colors, b.colors+128, colors);
     copy(b.primal, b.primal+128, primal);
-    copy(b.white_stash, b.white_stash+6 , white_stash);
-    copy(b.black_stash, b.black_stash+6 , black_stash);
+    copy(&b.stash[0][0], &b.stash[0][0]+12 , &stash[0][0]);
 	copy(&b.piece_count[0][0], &b.piece_count[0][0]+12, &piece_count[0][0]);
     side = b.side;
     my_king_location = b.my_king_location;
@@ -57,7 +56,7 @@ void Board::StartingPosition(){
 		primal[i] = 1;
 
     for(int i = 0; i < 6; i++)
-        white_stash[i] = black_stash[i] = 0;
+        stash[WHITE][i] = stash[BLACK][i] = 0;
 
 	piece_count[WHITE][KING] = 1;
 	piece_count[WHITE][QUEEN] = 1;
@@ -178,24 +177,10 @@ void Board::GenerateCastles(vector< MoveType > &moves){
 
 void Board::GenerateDrops(U8 sq, vector<MoveType> &moves){
     for(int i = 1; i < 6; i++){
-        if(side == WHITE){
-            if(white_stash[i]){
-                if((PieceType)i == PAWN && (ROW(sq) == 0 || ROW(sq) == 7)){
-                }
-                else{
-                    moves.push_back(MoveType((PieceType)i, 255, sq, EMPTY));
-                }
-            }
-        }
-        else{
-            if(black_stash[i]){
-                if((PieceType)i == PAWN && (ROW(sq) == 0 || ROW(sq) == 7)){
-                }
-                else{
-                    moves.push_back(MoveType((PieceType)i, 255, sq, EMPTY));
-                }
-            }
-        }
+		if(stash[side][i]){
+			if((PieceType)i == PAWN && (ROW(sq) == 0 || ROW(sq) == 7)) continue;
+			moves.push_back(MoveType((PieceType)i, 255, sq, EMPTY));
+		}
     }
 }
 
@@ -203,11 +188,8 @@ void Board::GeneratePseudoLegal(vector< MoveType > &moves){
 	GenerateCastles(moves);
 
     bool drop;
-    if(side == WHITE)
-        drop = (white_stash[1] + white_stash[2] + white_stash[3] + white_stash[4] + white_stash[5]) > 0;
-    else
-        drop = (black_stash[1] + black_stash[2] + black_stash[3] + black_stash[4] + black_stash[5]) > 0;
-
+    drop = (stash[side][1] + stash[side][2] + stash[side][3] + stash[side][4] + stash[side][5]) > 0;
+	
 	for(S8 i=0; i<8; i++)
 		for(S8 j=0; j<8; j++){
 			U8 sq = (U8)(16*i+j);
@@ -265,14 +247,8 @@ void Board::MakeMove(MoveType move){
         colors[dst] = side;
         pieces[dst] = drop;
         primal[dst] = 0;
-        if(side == WHITE){
-            assert(white_stash[drop]);
-            white_stash[drop]--;
-        }
-        else{
-            assert(black_stash[drop]);
-            black_stash[drop]--;
-        }
+		assert(stash[side][drop]);
+		stash[side][drop]--;
         // Display();
     }
 
@@ -306,10 +282,7 @@ void Board::MakeMove(MoveType move){
     	if(pieces[src] == PAWN){
     		//Make en passant
     		if(dst == enpassant){
-                if(side == WHITE)
-                    white_stash[PAWN]++;
-                else
-                    black_stash[PAWN]++;
+				stash[side][PAWN]++;
     			pieces[dst+(side==WHITE ? SOUTH : NORTH)] = EMPTY;
     			//cout<<"jolo\n";
     		}
@@ -330,18 +303,10 @@ void Board::MakeMove(MoveType move){
     	else
     		enpassant = -1;
         if(pieces[dst] != EMPTY){
-            if(side == WHITE){
-                if(primal[dst])
-                    white_stash[pieces[dst]]++;
-                else
-                    white_stash[PAWN]++;
-            }
-            else{
-                if(primal[dst])
-                    black_stash[pieces[dst]]++;
-                else
-                    black_stash[PAWN]++;
-            }
+			if(primal[dst])
+				stash[side][pieces[dst]]++;
+			else
+				stash[side][PAWN]++;
         }
     	SwapSquares(src, dst);
     }
