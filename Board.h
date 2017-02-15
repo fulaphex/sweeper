@@ -39,17 +39,28 @@ enum SquareCoor{
 };
 
 struct MoveType{
+	PieceType drop;
 	U8 src;
 	U8 dst;
 	PieceType promotion;
 
 	MoveType(U8 x, U8 y){
+		drop = EMPTY;
 		src = x;
 		dst = y;
 		promotion = EMPTY;
 	}
 
 	MoveType(U8 x, U8 y, PieceType piece){
+		drop = EMPTY;
+		src = x;
+		dst = y;
+		promotion = piece;
+	}
+
+	MoveType(PieceType d, U8 x, U8 y, PieceType piece){
+		// cout << d;
+		drop = d;
 		src = x;
 		dst = y;
 		promotion = piece;
@@ -84,6 +95,7 @@ public:
 
 private:
 	void setpos(SquareCoor a, PieceType x, PieceColor y);
+	void GenerateDrops(U8 sq, vector<MoveType> &moves);
 	void GeneratePawnMoves(U8 sq, vector< MoveType > &moves);
 	void GenerateCastles(vector< MoveType > &moves);
 	bool Attackers(U8 sq, U8 att_side, PieceType piece);
