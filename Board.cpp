@@ -33,6 +33,7 @@ void Board::ClearBoard(){
 }
 
 void Board::StartingPosition(){
+	ClearBoard();
 	pieces[0] = pieces[7] = ROOK;
 	pieces[1] = pieces[6] = KNIGHT;
 	pieces[2] = pieces[5] = BISHOP;
@@ -87,11 +88,19 @@ void Board::Display(){
 	for(int p = QUEEN; p!=EMPTY; p++)
 		cout<<stash[BLACK][p]<<" ";
 	cout<<"#\n#\n";
-	
 	for(int i=7; i>=0; i--){
 		cout<<"# ";
-		for(int j=0; j<8; j++)
+		for(int j=0; j<8; j++){
+			cout<<(int)colors[16*i+j];
+		}
+		cout<<"\n";
+	}
+	for(int i=7; i>=0; i--){
+		cout<<"# ";
+		for(int j=0; j<8; j++){
+			assert(pieces[16*i+j] != EMPTY || colors[16*i+j] == TRANSPARENT);
 			cout<<(char)(figures[ pieces[16*i+j] ] + (colors[16*i+j] == BLACK)*('a'-'A'));
+		}
 		cout<<"\n";
 	}
 	cout<<"#\n#\n";
@@ -257,7 +266,8 @@ void Board::MakeMove(MoveType move){
         assert(pieces[dst] == EMPTY);
         colors[dst] = side;
         pieces[dst] = drop;
-        primal[dst] = 0;
+		if(drop != PAWN)
+			primal[dst] = 1;
 		assert(stash[side][drop]);
 		stash[side][drop]--;
         // Display();
@@ -295,6 +305,7 @@ void Board::MakeMove(MoveType move){
     		if(dst == enpassant){
 				stash[side][PAWN]++;
     			pieces[dst+(side==WHITE ? SOUTH : NORTH)] = EMPTY;
+				colors[dst+(side==WHITE ? SOUTH : NORTH)] = TRANSPARENT;
     			//cout<<"jolo\n";
     		}
 
