@@ -16,12 +16,13 @@ Board::Board(Board &b){
     copy(b.pieces, b.pieces+128, pieces);
     copy(b.colors, b.colors+128, colors);
     copy(b.primal, b.primal+128, primal);
+    copy(b.white_stash, b.white_stash+6 , white_stash);
+    copy(b.black_stash, b.black_stash+6 , black_stash);
     side = b.side;
     my_king_location = b.my_king_location;
     opp_king_location = b.opp_king_location;
     enpassant = b.enpassant;
     castle_rights = b.castle_rights;
-
 }
 
 void Board::ClearBoard(){
@@ -49,6 +50,14 @@ void Board::StartingPosition(){
 	for(int i=0; i<8; i++)
 		colors[96+i] = colors[112+i] = BLACK;
 
+	for(int i=0; i<8; i++)
+		primal[i] = 1;
+	for(int i=112; i<120; i++)
+		primal[i] = 1;
+
+    for(int i = 0; i < 6; i++)
+        white_stash[i] = black_stash[i] = 0;
+
 	side = 0;
 
 	my_king_location = 4;
@@ -56,7 +65,7 @@ void Board::StartingPosition(){
 
 	castle_rights = 15;//2^4-1
 	enpassant = -1;
-	Display();
+	// Display();
 }
 
 void Board::Display(){
@@ -173,6 +182,8 @@ void inline Board::SwapSquares(U8 src, U8 dst){
 	pieces[src] = EMPTY;
 	colors[dst] = colors[src];
 	colors[src] = TRANSPARENT;
+    primal[dst] = primal[src];
+    primal[src] = 0;
 }
 
 void Board::TestCastles(){
@@ -227,6 +238,10 @@ void Board::MakeMove(MoveType move){
 	if(pieces[src] == PAWN){
 		//Make en passant
 		if(dst == enpassant){
+            if(side == WHITE)
+                white_stash[PAWN]++;
+            else
+                black_stash[PAWN]++;
 			pieces[dst+(side==WHITE ? SOUTH : NORTH)] = EMPTY;
 			//cout<<"jolo\n";
 		}
@@ -239,13 +254,19 @@ void Board::MakeMove(MoveType move){
 		if((S8)dst-(S8)src == SS)
 			enpassant = src+SOUTH;
 		//cout<<(int)enpassant<<"\n";
-		
+
 		//Promotion
 		if((ROW(dst) == 0) || ROW(dst) == 7)
 			pieces[src] = promotion;
 	}
 	else
 		enpassant = -1;
+    if(pieces[dst] != EMPTY){
+        if(side == WHITE)
+            white_stash[pieces[dst]]++;
+        else
+            black_stash[pieces[dst]]++;
+    }
 	SwapSquares(src, dst);
 
 	side = (side^1);

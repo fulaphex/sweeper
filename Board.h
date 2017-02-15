@@ -61,6 +61,8 @@ public:
 	U8 pieces[128];
 	U8 colors[128];
 	U8 primal[128];
+	U8 white_stash[6];
+	U8 black_stash[6];
 	U8 side; //0 - white, 1 - black
 	U8 my_king_location;
 	U8 opp_king_location;
