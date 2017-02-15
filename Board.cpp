@@ -80,12 +80,20 @@ void Board::StartingPosition(){
 
 void Board::Display(){
 	char figures[] = {'K', 'Q', 'R', 'B', 'N', 'P', '.'};
-
+	
+	cout<<"\n";
+	for(int p = QUEEN; p!=EMPTY; p++)
+		cout<<stash[BLACK][p]<<" ";
+	cout<<"\n\n";
+	
 	for(int i=7; i>=0; i--){
 		for(int j=0; j<8; j++)
 			cout<<(char)(figures[ pieces[16*i+j] ] + (colors[16*i+j] == BLACK)*('a'-'A'));
 		cout<<"\n";
 	}
+	cout<<"\n\n";
+	for(int p = QUEEN; p!=EMPTY; p++)
+		cout<<stash[WHITE][p]<<" ";
 	cout<<"\n\n";
 }
 

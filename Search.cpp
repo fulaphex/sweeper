@@ -32,6 +32,8 @@ MoveType BestMove(Board &state, S8 depth){
 		}
 	}
 	
+	cout<<"Eval: "<<best<<"\n";
+	
 	return ret;
 	
 }

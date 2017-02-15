@@ -20,13 +20,18 @@ int Eval(Board &state){
 	int score = 0;
 	for(int p = QUEEN; p!=EMPTY; p++)
 		score += (state.piece_count[state.side][p])*(piece_val[p]);
-// 	for(int p = QUEEN; p!=EMPTY; p++)
-// 		score += state.stash[state.side][p]*pieces_values[p];
+	for(int p = QUEEN; p!=EMPTY; p++)
+		score += (state.stash[state.side][p])*(piece_val[p]);
 	
 	for(int p = QUEEN; p!=EMPTY; p++)
 		score -= (state.piece_count[state.side^1][p])*(piece_val[p]);
-// 	for(int p = QUEEN; p!=EMPTY; p++)
-// 		score -= state.stash[state.side][p^1]*pieces_values[p];
+	for(int p = QUEEN; p!=EMPTY; p++)
+		score -= (state.stash[state.side^1][p])*(piece_val[p]);
+	
+	score += (int)legal.size();
+// 	for(auto &move : legal)
+// 		if(state.colors[move.dst] == (state.side^1))
+// 			score++;
 	
 	return score;
 }
