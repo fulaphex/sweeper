@@ -15,6 +15,7 @@ Board::Board(){}
 Board::Board(Board &b){
     copy(b.pieces, b.pieces+128, pieces);
     copy(b.colors, b.colors+128, colors);
+    copy(b.primal, b.primal+128, primal);
     side = b.side;
     cout << "copy contructor in use\n";
     my_king_location = b.my_king_location;

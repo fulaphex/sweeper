@@ -42,12 +42,12 @@ struct MoveType{
 	U8 src;
 	U8 dst;
 	PieceType promotion;
-	
+
 	MoveType(U8 x, U8 y){
 		src = x;
 		dst = y;
 	}
-	
+
 	MoveType(U8 x, U8 y, PieceType piece){
 		src = x;
 		dst = y;
@@ -59,6 +59,7 @@ class Board{
 public:
 	U8 pieces[128];
 	U8 colors[128];
+	U8 primal[128];
 	U8 side; //0 - white, 1 - black
 	U8 my_king_location;
 	U8 opp_king_location;
