@@ -262,10 +262,18 @@ void Board::MakeMove(MoveType move){
 	else
 		enpassant = -1;
     if(pieces[dst] != EMPTY){
-        if(side == WHITE)
-            white_stash[pieces[dst]]++;
-        else
-            black_stash[pieces[dst]]++;
+        if(side == WHITE){
+            if(primal[dst])
+                white_stash[pieces[dst]]++;
+            else
+                white_stash[PAWN]++;
+        }
+        else{
+            if(primal[dst])
+                black_stash[pieces[dst]]++;
+            else
+                black_stash[PAWN]++;
+        }
     }
 	SwapSquares(src, dst);
 
