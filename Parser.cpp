@@ -16,6 +16,7 @@ MoveType StringToMove(string s){
                 }
                 case 'N':{
                     drop = KNIGHT;
+                    break;
                 }
                 case 'B':{
                     drop = BISHOP;
