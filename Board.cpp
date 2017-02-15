@@ -84,7 +84,7 @@ void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
 		//regular moves
 		if(pieces[sq + NORTH] == EMPTY){
 			if(ROW(sq) == 6){
-				for(int p = QUEEN; p!=EMPTY; p++)
+				for(int p = QUEEN; p!=PAWN; p++)
 					moves.push_back(MoveType(sq, sq+NORTH, (PieceType)p));
 			}
 			else
@@ -94,17 +94,27 @@ void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
 		}
 		//captures
 		if(IS_SQ(sq+NW) && (colors[sq+NW] == (side^1) || enpassant == sq+NW)){
-			moves.push_back(MoveType(sq, sq+NW));
+			if(ROW(sq) == 6){
+				for(int p = QUEEN; p!=PAWN; p++)
+					moves.push_back(MoveType(sq, sq+NW, (PieceType)p));
+			}
+			else
+				moves.push_back(MoveType(sq, sq+NW));
 		}
 		if(IS_SQ(sq+NE) && (colors[sq+NE] == (side^1) || enpassant == sq+NE)){
-			moves.push_back(MoveType(sq, sq+NE));
+			if(ROW(sq) == 6){
+				for(int p = QUEEN; p!=PAWN; p++)
+					moves.push_back(MoveType(sq, sq+NE, (PieceType)p));
+			}
+			else
+				moves.push_back(MoveType(sq, sq+NE));
 		}
 	}
 	else{//side == BLACK
 		//regular moves
 		if(pieces[sq + SOUTH] == EMPTY){
 			if(ROW(sq) == 1){
-				for(int p = QUEEN; p!=EMPTY; p++)
+				for(int p = QUEEN; p!=PAWN; p++)
 					moves.push_back(MoveType(sq, sq+SOUTH, (PieceType)p));
 			}
 			else
@@ -114,10 +124,20 @@ void Board::GeneratePawnMoves(U8 sq, vector< MoveType > &moves){
 		}
 		//captures
 		if(IS_SQ(sq+SW) && (colors[sq+SW] == (side^1) || enpassant == sq+SW)){
-			moves.push_back(MoveType(sq, sq+SW));
+			if(ROW(sq) == 1){
+				for(int p = QUEEN; p!=PAWN; p++)
+					moves.push_back(MoveType(sq, sq+SW, (PieceType)p));
+			}
+			else
+				moves.push_back(MoveType(sq, sq+SW));
 		}
 		if(IS_SQ(sq+SE) && (colors[sq+SE] == (side^1) || enpassant == sq+SE)){
-			moves.push_back(MoveType(sq, sq+SE));
+			if(ROW(sq) == 1){
+				for(int p = QUEEN; p!=PAWN; p++)
+					moves.push_back(MoveType(sq, sq+SE, (PieceType)p));
+			}
+			else
+				moves.push_back(MoveType(sq, sq+SE));
 		}
 	}
 }
@@ -256,7 +276,7 @@ void Board::MakeMove(MoveType move){
 		//cout<<(int)enpassant<<"\n";
 
 		//Promotion
-		if((ROW(dst) == 0) || ROW(dst) == 7)
+		if((ROW(dst) == 0) || (ROW(dst) == 7))
 			pieces[src] = promotion;
 	}
 	else
@@ -302,10 +322,10 @@ bool Board::Attackers(U8 sq, U8 att_side, PieceType piece){
 
 bool Board::PawnAttackers(U8 sq, U8 att_side){
 	if(att_side == BLACK){
-		return (colors[sq+NW] == att_side && pieces[sq+NW] == PAWN) || (colors[sq+NE] == att_side && pieces[sq+NE] == PAWN);
+		return (IS_SQ(sq+NW) && colors[sq+NW] == att_side && pieces[sq+NW] == PAWN) || (IS_SQ(sq+NE) && colors[sq+NE] == att_side && pieces[sq+NE] == PAWN);
 	}
 	else{
-		return (colors[sq+SW] == att_side && pieces[sq+SW] == PAWN) || (colors[sq+SE] == att_side && pieces[sq+SE] == PAWN);
+		return (IS_SQ(sq+SW) && colors[sq+SW] == att_side && pieces[sq+SW] == PAWN) || (IS_SQ(sq+SE) && colors[sq+SE] == att_side && pieces[sq+SE] == PAWN);
 	}
 }
 
@@ -411,5 +431,5 @@ void Board::TestBoard4(){
 
     my_king_location = G1;
     opp_king_location = E8;
-    enpassant = (U8)-1;
+    enpassant = -1;
 }

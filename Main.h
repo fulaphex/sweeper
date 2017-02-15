@@ -21,5 +21,7 @@ extern int captures;
 extern int checks;
 extern int mates;
 extern int enpassants;
+extern int promotions;
+extern int castles;
 
 #endif

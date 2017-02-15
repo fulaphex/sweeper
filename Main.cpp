@@ -13,6 +13,6 @@ int main(){
 	board.Display();
 	//cout<<(int)board.enpassant<<"\n";
 	Search(board, 6);
-	cout<<curr<<" "<<captures<<" "<<checks<<" "<<mates<<" "<<enpassants<<"\n";
+	cout<<curr<<" "<<captures<<" "<<checks<<" "<<mates<<" "<<enpassants<<" "<<promotions<<" "<<castles<<"\n";
 	return 0;
 }
