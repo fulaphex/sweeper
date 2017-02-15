@@ -48,27 +48,27 @@ MoveType StringToMove(string s){
     if(s.length() == 5){
         U8 c = s[0] - 'a', r = s[1] - '1', nc = s[2] - 'a', nr = s[3] - '1';
         if(s[0] > 'h' || s[0] < 'a' || s[1] > '8' || s[1] < '0' || s[2] > 'h' || s[2] < 'a' || s[3] > '8' || s[3] < '0' &&\
-           (s[4] == 'P' || s[4] == 'N' || s[4] == 'B' || s[4] == 'R' || s[4] == 'Q'))
+           (s[4] != 'p' && s[4] != 'n' && s[4] != 'b' && s[4] != 'r' && s[4] != 'q'))
             return MoveType((SquareCoor)255, (SquareCoor)255);
         PieceType promotion;
         switch(s[4]){
-            case 'P':{
+            case 'p':{
                 promotion = PAWN;
                 break;
             }
-            case 'N':{
+            case 'n':{
                 promotion = KNIGHT;
                 break;
             }
-            case 'B':{
+            case 'b':{
                 promotion = BISHOP;
                 break;
             }
-            case 'R':{
+            case 'r':{
                 promotion = ROOK;
                 break;
             }
-            case 'Q':{
+            case 'q':{
                 promotion = QUEEN;
                 break;
             }
