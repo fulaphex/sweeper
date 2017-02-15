@@ -63,6 +63,7 @@ public:
 	U8 primal[128];
 	U8 white_stash[6];
 	U8 black_stash[6];
+	U8 piece_count[2][6];
 	U8 side; //0 - white, 1 - black
 	U8 my_king_location;
 	U8 opp_king_location;
@@ -76,6 +77,7 @@ public:
 	void GeneratePseudoLegal(vector< MoveType > &moves);
 	void MakeMove(MoveType move);
 	bool IsAttacked(U8 sq, U8 side);
+	bool IsLegal();
 	void Display();
 	void test();
 	void TestCastles();

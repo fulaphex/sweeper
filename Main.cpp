@@ -1,6 +1,7 @@
 #include "Main.h"
 #include "Board.h"
 #include "Search.h"
+#include "Eval.h"
 
 Board board;
 
@@ -12,7 +13,8 @@ int main(){
 	//board.MakeMove(E2, E4);
 	board.Display();
 	//cout<<(int)board.enpassant<<"\n";
-	Search(board, 6);
+	//Search(board, 6);
+	cout<<Eval(board)<<"\n";
 	cout<<curr<<" "<<captures<<" "<<checks<<" "<<mates<<" "<<enpassants<<" "<<promotions<<" "<<castles<<"\n";
 	return 0;
 }
