@@ -40,6 +40,10 @@ int main(){
             // Todo parse level command and time
             continue;
         }
+        else if(comm == "post"){
+            // Todo parse level command and time
+            continue;
+        }
         else if(comm.substr(0,4) == "time"){
             time_left = stoi(comm.substr(5));
             cout << "#       my time remaining: " << time_left/100 << "seconds\n";
@@ -48,13 +52,16 @@ int main(){
             opponent_time_left = stoi(comm.substr(5));
             cout << "# opponent time remaining: " << opponent_time_left/100 << "seconds\n";
         }
-        else if(comm.length() == 4){
+        else if(comm.length() == 4 || comm.length() == 5){
             int x = int(comm[1]-'1'), y = int(comm[0]-'a'), nx = int(comm[3]-'1'), ny = int(comm[2]-'a');
             // cout  << "# " << x << y << nx << ny << "\n";
-            if(0 <= min(min(x, nx), min(y, ny)) && 8 > max(max(x, nx), max(y, ny))){
-				move = StringToMove(comm);
-				board.MakeMove(move);
+			cout << "# comm = '" << comm << "' " << comm.length();
+			move = StringToMove(comm);
+			cout << move.drop << " " << move.src << " " << move.dst << " " << move.promotion << "\n";
+            // if(0 <= min(min(x, nx), min(y, ny)) && 8 > max(max(x, nx), max(y, ny))){
+			if(move.dst != 255){
                 // cout << "# parsing a move: " << comm << "\n";
+				board.MakeMove(move);
                 move_parsed = true;
             }
         }

@@ -4,8 +4,10 @@ MoveType StringToMove(string s){
     // cout << s << "\n";
     if(s.length() == 4){
         if(s[1] == '@'){ // drop move
-            // cout << "dropmove '" << s[0] << "'\n";
+            cout << "dropmove '" << s[0] << "'\n";
             U8 nc = s[2] - 'a', nr = s[3] - '1';
+            if(s[2] > 'h' || s[2] < 'a' || s[3] > '8' || s[3] < '0')
+                return MoveType((SquareCoor)255, (SquareCoor)255);
             PieceType drop;
             switch(s[0]){
                 case 'P':{
@@ -35,6 +37,8 @@ MoveType StringToMove(string s){
             return MoveType(drop, (SquareCoor)255, (SquareCoor)SET_SQ(nr, nc), EMPTY);
         }
         else{ // normal move
+            if(s[0] > 'h' || s[0] < 'a' || s[1] > '8' || s[1] < '0' || s[2] > 'h' || s[2] < 'a' || s[3] > '8' || s[3] < '0')
+                return MoveType((SquareCoor)255, (SquareCoor)255);
             U8 c = s[0] - 'a', r = s[1] - '1', nc = s[2] - 'a', nr = s[3] - '1';
             // cout << r << " " << c << " " << nr << " " << nc << "\n";
             return MoveType((SquareCoor)SET_SQ(r, c), (SquareCoor)SET_SQ(nr, nc));
@@ -42,6 +46,9 @@ MoveType StringToMove(string s){
     }
     if(s.length() == 5){
         U8 c = s[0] - 'a', r = s[1] - '1', nc = s[2] - 'a', nr = s[3] - '1';
+        if(s[0] > 'h' || s[0] < 'a' || s[1] > '8' || s[1] < '0' || s[2] > 'h' || s[2] < 'a' || s[3] > '8' || s[3] < '0' &&\
+           (s[4] == 'P' || s[4] == 'N' || s[4] == 'B' || s[4] == 'R' || s[4] == 'Q'))
+            return MoveType((SquareCoor)255, (SquareCoor)255);
         PieceType promotion;
         switch(s[4]){
             case 'P':{
